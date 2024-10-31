@@ -2,8 +2,7 @@ from fastapi.encoders import jsonable_encoder
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models import CharityProject
-from app.models import Donation
+from app.models import CharityProject, Donation
 
 
 class CRUDBase:
@@ -69,7 +68,7 @@ class CRUDBase:
         await session.commit()
         return db_object
 
-    async def get_open_object(
+    async def get_open_project(
             self,
             session: AsyncSession
     ):
@@ -79,7 +78,12 @@ class CRUDBase:
             .order_by(CharityProject.create_date)
         )
         project = project_result.scalars().first()
+        return project
 
+    async def get_open_donation(
+            self,
+            session: AsyncSession
+    ):
         donation_result = await session.execute(
             select(Donation)
             .where(Donation.fully_invested == 0)
@@ -87,4 +91,4 @@ class CRUDBase:
         )
         donation = donation_result.scalars().first()
 
-        return project, donation
+        return donation

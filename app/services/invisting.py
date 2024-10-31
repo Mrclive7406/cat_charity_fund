@@ -6,7 +6,8 @@ from app.crud.donation import donation_crud
 
 
 async def invisting(session: AsyncSession, obj):
-    project, donation = await donation_crud.get_open_object(session)
+    project = await donation_crud.get_open_project(session)
+    donation = await donation_crud.get_open_donation(session)
 
     if not project or not donation:
         await session.commit()

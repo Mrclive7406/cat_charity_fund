@@ -1,17 +1,17 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.validators import (
-    check_charity_project_exists, validate_charity_project,
-    check_project_before_delete,
-    check_name_is_unique, validate_project_update
-)
+from app.api.validators import (check_charity_project_exists,
+                                check_name_is_unique,
+                                check_project_before_delete,
+                                validate_charity_project,
+                                validate_project_update)
 from app.core.db import get_async_session
 from app.core.user import current_superuser
 from app.crud.charity_project import charity_project_crud
-from app.schemas.charity_project import (
-    CharityProjectCreate, CharityProjectDB, CharityProjectUpdate
-)
+from app.schemas.charity_project import (CharityProjectCreate,
+                                         CharityProjectDB,
+                                         CharityProjectUpdate)
 from app.services.invisting import invisting
 
 CHARITY_PROJECT_PATH = '/'
@@ -37,9 +37,9 @@ async def create_charity_project(
         session=session
     )
 
-    new_project = await charity_project_crud.create(charity_project, session)
-    new_project = await invisting(session, new_project)
-    return new_project
+    return await invisting(
+        session,
+        await charity_project_crud.create(charity_project, session))
 
 
 @router.get(

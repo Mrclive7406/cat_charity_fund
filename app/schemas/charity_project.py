@@ -1,5 +1,6 @@
 from datetime import datetime
 from typing import Optional
+
 from pydantic import BaseModel, Extra, Field, NonNegativeInt, PositiveInt
 
 from app.core.constants import MAX_LENGTH, MIN_LENGTH
